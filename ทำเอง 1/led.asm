@@ -24,5 +24,5 @@ LED_ON:
 		bsf portb,1
 		goto inf_loop
 		end
-		
+		11111
 		
