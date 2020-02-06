@@ -1,0 +1,42 @@
+,,,                PROCESSOR PIC16F628
+,,,                #include <P16F628.INC>
+00002007,3F58,,                __CONFIG        _CP_OFF & _MCLRE_OFF & _INTRC_OSC_NOCLKOUT & _LVP_OFF & _WDT_OFF
+,,,
+,,,                cblock  0x20
+,,,                        x
+,,,                        y
+,,,                        remain
+,,,                        count
+,,,                        endc
+,,,
+00000000,,,                        ORG             0x00                    ; Reset Vector
+00000000,2807,,                        goto    Mymain          ; vector to main program
+,,,
+00000004,,,                        ORG             0x04                    ; Interupt Vector
+00000004,2805,,                        goto    MyISR           ; vector to interrup service routine
+,,,
+00000005,,MyISR:,MyISR:                                          ; blank ISR routine
+00000005,0000,,                        nop
+00000006,0009,,                        retfie
+00000007,3007,Mymain:,Mymain:         movlw   .7
+00000008,00A0,,                        movwf   x
+00000009,3003,,                        movlw   .3
+0000000A,00A1,,                        movwf   y
+0000000B,01A2,,                        clrf    remain
+0000000C,01A3,,                        clrf    count
+0000000D,0103,,                        clrw
+0000000E,0821,,                        movf    y,W
+0000000F,0220,,                        subwf   x,remain
+,,,
+00000010,1903,check:,check:          btfsc   STATUS,Z
+00000011,2817,,                        goto    count_end
+,,,
+00000012,0AA3,count_go:,count_go:       incf    count,F
+00000013,2814,,                        goto    new_loop
+,,,
+00000014,0821,new_loop:,new_loop:       movf    y,W
+00000015,0222,,                        subwf   remain,remain
+00000016,2810,,                        goto    check
+,,,
+00000017,0AA3,count_end:,count_end:      incf    count,F
+,,,                        end

@@ -1,0 +1,45 @@
+,,,            2.ASM   8-30-2018  20:48:27         PAGE  1
+,,,        PROCESSOR PIC16F628
+,,,                #include <P16F628.INC>
+00002007,3F58,,                __CONFIG        _CP_OFF & _MCLRE_OFF & _INTRC_OSC_NOCLKOUT & _LVP_OFF & _WDT_OFF
+,,,
+,,,                cblock  0x20
+,,,                        xh
+,,,                        xl
+,,,                endc
+,,,                cblock  0x30
+,,,                        yh
+,,,                        yl
+,,,                endc
+,,,
+00000000,,,                ORG             0x00                    ; Reset Vector
+00000000,2807,,                goto    main            ; vector to main program
+,,,
+00000004,,,                ORG             0x04                    ; Interrupt Vector
+00000004,2805,,                goto    MyISR           ; vector to interrup service routine
+,,,
+00000005,,MyISR:,MyISR:                                          ; blank ISR routine
+00000005,0000,,                nop
+00000006,0009,,                retfie
+,,,
+00000007,,main:,main:
+,,,
+00000007,3088,,                movlw   B'10001000'
+00000008,00A1,,                movwf   xl
+00000009,3013,,                movlw   B'00010011'
+0000000A,00A0,,                movwf   xh
+0000000B,3070,,                movlw   B'01110000'
+0000000C,00B1,,                movwf   yl
+0000000D,3017,,                movlw   B'00010111'
+0000000E,00B0,,                movwf   yh
+0000000F,0821,,                movf    xl,w
+00000010,0731,,                addwf   yl,w
+00000011,1803,,                btfsc   STATUS,C
+00000012,0A20,,                incf    xh,xh
+00000013,0820,,                movf    xh,w
+00000014,0730,,                addwf   yh,w
+00000015,1803,,                btfsc   STATUS,C
+00000016,1422,,                bsf             22H,0
+00000017,00A0,,                movwf   xh
+,,,
+,,,                end
